@@ -1,9 +1,13 @@
 #ifndef MATRIX_H
 #define MATRIX_H
+#include "cell.h"
 
 typedef struct {
-	int state;
-	char c;
-} Cell;
+	int size_x;
+	int size_y;
+	Cell *cell;
+} Matrix;
+
+
 
 #endif
