@@ -5,7 +5,7 @@
 typedef struct {
 	int size_x;
 	int size_y;
-	Cell *matrix;
+	Cell *cell;
 } Matrix;
 
 
