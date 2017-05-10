@@ -1,12 +1,12 @@
 #include "cell.h"
 
-void mode_cell(Cell *cell, int mode)
+void mode_cell(Cell *cell, int mode, char ch)
 {
 	cell->state = mode;
 	if(mode) {
-		cell->c = '0';
+		cell->c = ch;
 	} else {
-		cell->c = '.';
+		cell->c = ch;
 	}
 }
 
