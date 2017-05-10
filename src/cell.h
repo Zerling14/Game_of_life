@@ -6,6 +6,8 @@ typedef struct {
 	char c;
 } Cell;
 
+void mode_cell(Cell *cell, int mode, char ch);
 
+int check_cell(Cell *cell);
 
 #endif
