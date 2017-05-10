@@ -8,6 +8,6 @@ typedef struct {
 	Cell *cell;
 } Matrix;
 
-
+int init_matrix(Matrix *matx, int size_x, int size_y);
 
 #endif
