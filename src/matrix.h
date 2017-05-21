@@ -3,6 +3,8 @@
 #include "cell.h"
 
 typedef struct {
+	char empty_cell;
+	char life_cell;
 	int size_x;
 	int size_y;
 	Cell *cell;
