@@ -82,7 +82,7 @@ int write_file(char *name_file, Matrix *matx)
 		for (int x = 0; x < matx->size_x; x++) {
 			fprintf(out, "%d", matx->cell[x + matx->size_y * y].state);
 		}
-		fprintf(out, "%c", '\n');
+		fprintf(out, "\n");
 	}
 	fclose(out);
 	return 0;
