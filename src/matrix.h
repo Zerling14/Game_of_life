@@ -18,9 +18,9 @@ void free_matrix(Matrix *matx);
 
 void copy_matrix(Matrix *matx_des, Matrix *matx_src);
 
-void read_file(char *name_file, Matrix *matx);
+int read_file(char *name_file, Matrix *matx);
 
-void write_file(char *name_file, Matrix *matx);
+int write_file(char *name_file, Matrix *matx);
 
 Matrix *resize_matx(Matrix *matx, int x, int y);
 
