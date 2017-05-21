@@ -8,6 +8,8 @@ typedef struct {
 	char char_cell;
 } Cell;
 
+void init_cell(Cell *cell, int mode, char life_char, char empty_char);
+
 void mode_cell(Cell *cell, int mode, char ch);
 
 int check_cell(Cell *cell);
