@@ -8,7 +8,7 @@ void init_cell(Cell *cell, int mode, char life_char, char empty_char)
 	mode_cell(cell, mode);
 }
 
-void mode_cell(Cell *cell, int mode, char ch)
+void mode_cell(Cell *cell, int mode)
 {
 	cell->state = mode;
 	if (mode) {
