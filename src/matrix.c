@@ -2,13 +2,24 @@
 #include "cell.h"
 #include <stdlib.h>
 
-int init_matrix(Matrix *matx, int size_x, int size_y)
+Matrix *init_matrix(int size_x, int size_y, char life_cell, char empty_cell)
 {
-	matx->cell = calloc(size_x * size_y, sizeof(Cell));
-	if (matx->cell) {
-		return 0;
+	Matrix *matx = calloc(1, sizeof(Matrix));
+
+	if (matx == NULL) {
+		return NULL;
 	}
-	return 1;
+
+	matx->size_x = size_x;
+	matx->size_y = size_y;
+	matx->empty_cell = empty_cell;
+	matx->life_cell = life_cell;
+
+	matx->cell = calloc(size_x * size_y, sizeof(Cell*));
+	for (int i = 0; i < size_x * size_y; i++) {
+		matx->cell[i] = init_cell(0, life_cell, empty_cell); 
+	}
+	return matx;
 }
 
 int add_cells_to_matrix(Matrix *matx, Cell *cell, int size_x, int size_y)
