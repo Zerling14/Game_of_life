@@ -101,3 +101,15 @@ Matrix *resize_matx(Matrix *matx, int x, int y)
 
 	return matx;
 }
+
+void print_matrix(Matrix *matx)
+{
+	printf("%c %c %d %d\n", matx->empty_cell, matx->life_cell, matx->size_x, matx->size_y);
+	
+	for (int y = 0; y < matx->size_y; y++) {
+		for (int x = 0; x < matx->size_x; x++) {
+			printf("%d", matx->cell[x + matx->size_y * y].char_cell);
+		}
+		printf("\n");
+	}
+}
