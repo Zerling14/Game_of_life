@@ -17,14 +17,13 @@ int main()
 		return 1;
 	}
 
-	//write_file("test_out.txt", matx);
-
 	if (read_file("test_out.txt", matx) == 1) {
 		printf("Error read file\n");
 		return 1;
 	}
 
-	//write_file("test_out_1.txt", matx);
+	print_matrix(matx);
 
+	free_matrix(matx);
 	return 0;
 }

@@ -24,4 +24,6 @@ int write_file(char *name_file, Matrix *matx);
 
 Matrix *resize_matx(Matrix *matx, int x, int y);
 
+void print_matrix(Matrix *matx);
+
 #endif
