@@ -22,7 +22,13 @@ Matrix *init_matrix(int size_x, int size_y, char life_cell, char empty_cell)
 	return matx;
 }
 
-int add_cells_to_matrix(Matrix *matx, Cell *cell, int size_x, int size_y)
+Cell *get_cell_from_matrix(Matrix *matx, int x, int y)
 {
-	
+	return matx->cell + matx->size_y * y + x;
+}
+
+void free_matrix(Matrix *matx)
+{
+	free(matx->cell);
+	free(matx);
 }
