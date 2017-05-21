@@ -22,3 +22,8 @@ int check_cell(Cell *cell)
 {
 	return cell->state;
 }
+
+char char_cell(Cell *cell)
+{
+	return cell->char_cell;
+}
