@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include "cell.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 Matrix *init_matrix(int size_x, int size_y, char life_cell, char empty_cell)
 {
@@ -45,11 +46,17 @@ void copy_matrix(Matrix *matx_des, Matrix *matx_src)
 void read_file(char *name_file, Matrix *matx)
 {
 	FILE *in = fopen(name_file, "r");
+	int new_x, new_y;
+	fscanf(in, "%c %c %d %d", &matx->empty_cell, &matx->life_cell, &new_x, &new_y);
+
+	matx = resize_matx(matx, new_x, new_y);
 
 	for (int y = 0; y < matx->size_y; y++) {
-		for (int x = 0; x < matx_size_x; x++) {
-			fscanf(in, "%c", matx->cell[x + matx->size_y * y]);
-			if (matx->cell[x + matx->size_y * y] == '\n') {
+		for (int x = 0; x < matx->size_x; x++) {
+			int tmp;
+			fscanf(in, "%d", &tmp);
+			mode_cell(matx->cell + (x + matx->size_y * y), tmp);
+			if (tmp == '\n') {
 				x--;
 			}	
 		}
@@ -60,13 +67,26 @@ void read_file(char *name_file, Matrix *matx)
 void write_file(char *name_file, Matrix *matx)
 {
 	FILE *out = fopen(name_file, "w");
-
+	fprintf(out, "%c %c %d %d\n", matx->empty_cell, matx->life_cell, matx->size_x, matx->size_y);
 	for (int y = 0; y < matx->size_y; y++) {
 		for (int x = 0; x < matx->size_x; x++) {
-			fprintf(out, "%c", matx->cell[x + matx->size_y * y]);
+			fprintf(out, "%d", matx->cell[x + matx->size_y * y].state);
 		}
 		fprintf(out, "%c", '\n');
 	}
-
 	fclose(out);
+}
+
+Matrix *resize_matx(Matrix *matx, int x, int y)
+{
+	matx->size_x = x;
+	matx->size_y = y;
+
+	matx->cell = realloc(matx->cell, x * y * sizeof(Cell));
+
+	if (!matx->cell) {
+		return NULL;
+	}
+
+	return matx;
 }

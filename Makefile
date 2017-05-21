@@ -1,8 +1,8 @@
 all: bin/main
 
-bin/main: build/src/main.o build/src/matrix.o build/src/cell.o build/src/field.o
+bin/main: build/src/main.o build/src/matrix.o build/src/cell.o
 	mkdir bin -p
-	gcc -Wall -o bin/main build/src/main.o build/src/matrix.o build/src/cell.o build/src/field.o
+	gcc -Wall -o bin/main build/src/main.o build/src/matrix.o build/src/cell.o
 
 build/src/main.o: src/main.c
 	mkdir build -p
