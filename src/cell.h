@@ -3,7 +3,9 @@
 
 typedef struct {
 	int state;
-	char c;
+	char empty_char_cell = '.';
+	char life_char_cell = '0';
+	char char_cell;
 } Cell;
 
 void mode_cell(Cell *cell, int mode, char ch);
