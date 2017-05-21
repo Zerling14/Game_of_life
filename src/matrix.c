@@ -32,3 +32,12 @@ void free_matrix(Matrix *matx)
 	free(matx->cell);
 	free(matx);
 }
+
+void copy_matrix(Matrix *matx_des, Matrix *matx_src)
+{
+	for (int y = 0; y < size_y; y++) {
+		for (int x = 0; x < size_x; x++) {
+			matx_des[x * size_y + y] = matx_src[x * size_y + y];
+		}
+	}
+}
