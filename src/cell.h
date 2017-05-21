@@ -14,4 +14,6 @@ void mode_cell(Cell *cell, int mode);
 
 int check_cell(Cell *cell);
 
+char char_cell(Cell *cell);
+
 #endif
