@@ -8,7 +8,7 @@ typedef struct {
 	char char_cell;
 } Cell;
 
-Cell *init_cell(int mode, char life_char, char empty_char);
+Cell init_cell(int mode, char life_char, char empty_char);
 
 void mode_cell(Cell *cell, int mode);
 

@@ -4,9 +4,7 @@
 Cell init_cell(int mode, char life_char, char empty_char)
 {
 	Cell cell;
-	if (cell == NULL) {
-		return NULL;
-	}
+
 	cell.life_char_cell = life_char;
 	cell.empty_char_cell = empty_char;
 	
