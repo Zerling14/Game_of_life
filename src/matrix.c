@@ -15,7 +15,7 @@ Matrix *init_matrix(int size_x, int size_y, char life_cell, char empty_cell)
 	matx->empty_cell = empty_cell;
 	matx->life_cell = life_cell;
 
-	matx->cell = calloc(size_x * size_y, sizeof(Cell*));
+	matx->cell = calloc(size_x * size_y, sizeof(Cell));
 	for (int i = 0; i < size_x * size_y; i++) {
 		matx->cell[i] = init_cell(0, life_cell, empty_cell); 
 	}
