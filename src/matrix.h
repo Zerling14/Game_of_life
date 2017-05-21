@@ -18,5 +18,7 @@ void free_matrix(Matrix *matx);
 
 void copy_matrix(Matrix *matx_des, Matrix *matx_src);
 
+void read_file(char *name_file, Matrix *matx);
+
 #endif
 	

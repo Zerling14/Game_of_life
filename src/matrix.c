@@ -35,9 +35,26 @@ void free_matrix(Matrix *matx)
 
 void copy_matrix(Matrix *matx_des, Matrix *matx_src)
 {
-	for (int y = 0; y < size_y; y++) {
-		for (int x = 0; x < size_x; x++) {
-			matx_des[x * size_y + y] = matx_src[x * size_y + y];
+	for (int y = 0; y < matx_src->size_y; y++) {
+		for (int x = 0; x < matx_src->size_x; x++) {
+			matx_des->cell[x + matx_src->size_y * y] = matx_src->cell[x + matx_src->size_y * y];
 		}
 	}
+}
+
+void read_file(char *name_file, Matrix *matx)
+{
+	FILE *in = fopen(name_file, "r");
+
+	for (int y = 0; y < matx->size_y; y++) {
+		for (int x = 0; x < matx_size_x; x++) {
+			fscanf(in, "%c", matx->cell[x + matx->size_y * y]);
+			if (matx->cell[x + matx->size_y * y] == '\n') {
+				x--;
+				continue;
+			}	
+		}
+	}
+	
+	fclose(in);
 }
