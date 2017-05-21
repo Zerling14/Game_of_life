@@ -1,11 +1,16 @@
 #include "cell.h"
+#include <stdlib.h>
 
-void init_cell(Cell *cell, int mode, char life_char, char empty_char)
+Cell init_cell(int mode, char life_char, char empty_char)
 {
-	cell->life_char_cell = life_char;
-	cell->empty_char_cell = empty_char;
+	Cell cell;
+
+	cell.life_char_cell = life_char;
+	cell.empty_char_cell = empty_char;
 	
-	mode_cell(cell, mode);
+	mode_cell(&cell, mode);
+	
+	return cell;
 }
 
 void mode_cell(Cell *cell, int mode)

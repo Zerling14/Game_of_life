@@ -10,6 +10,7 @@ typedef struct {
 	Cell *cell;
 } Matrix;
 
-int init_matrix(Matrix *matx, int size_x, int size_y);
+Matrix *init_matrix(int size_x, int size_y, char life_cell, char empty_cell);
 
 #endif
+	
