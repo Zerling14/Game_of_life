@@ -3,14 +3,14 @@
 
 typedef struct {
 	int state;
-	char empty_char_cell = '.';
-	char life_char_cell = '0';
+	char empty_char_cell;
+	char life_char_cell;
 	char char_cell;
 } Cell;
 
 void init_cell(Cell *cell, int mode, char life_char, char empty_char);
 
-void mode_cell(Cell *cell, int mode, char ch);
+void mode_cell(Cell *cell, int mode);
 
 int check_cell(Cell *cell);
 
