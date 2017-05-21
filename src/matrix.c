@@ -51,10 +51,22 @@ void read_file(char *name_file, Matrix *matx)
 			fscanf(in, "%c", matx->cell[x + matx->size_y * y]);
 			if (matx->cell[x + matx->size_y * y] == '\n') {
 				x--;
-				continue;
 			}	
 		}
 	}
-	
 	fclose(in);
+}
+
+void write_file(char *name_file, Matrix *matx)
+{
+	FILE *out = fopen(name_file, "w");
+
+	for (int y = 0; y < matx->size_y; y++) {
+		for (int x = 0; x < matx->size_x; x++) {
+			fprintf(out, "%c", matx->cell[x + matx->size_y * y]);
+		}
+		fprintf(out, "%c", '\n');
+	}
+
+	fclose(out);
 }
