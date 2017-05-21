@@ -12,5 +12,6 @@ typedef struct {
 
 Matrix *init_matrix(int size_x, int size_y, char life_cell, char empty_cell);
 
+void free_matrix(Matrix *matx);
 #endif
 	
