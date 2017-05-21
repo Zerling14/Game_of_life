@@ -6,29 +6,21 @@
 
 int main()
 {
-	// Create to matrix
+	char empty_cell = '.';
+	char life_cell = '0';
+	int size_x = 1;
+	int size_y = 1;
 
-	srand(time(0));
-	//char empty_cell = '.';
-	//char life_cell = '0';
-	int size_x = 80;
-	int size_y = 60;
-
-	/*
-	Cell matrix[size_y][size_x];
-	for (int i = 0; i < size_y; i++) {
-		for (int j = 0; j < size_x	; j++) {
-			Cell tmp;
-			tmp.state = 0;
-			tmp.c = empty_cell;
-			matrix[i][j] = tmp;
-		}
-	}
-	*/
-
-	Matrix matx;
-	if (!init_matrix(&matx, size_x, size_y)) {
+	Matrix *matx = init_matrix(size_x, size_y, life_cell, empty_cell);
+	if (matx) {
 		printf("OK\n");
 	}
+
+	write_file("test_out.txt", matx);
+
+	read_file("test_out.txt", matx);
+
+	write_file("test_out_1.txt", matx);
+
 	return 0;
 }
