@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define LIFE 1
+#define DEAD 0
+
 Matrix *init_matrix(int size_x, int size_y, char life_cell, char empty_cell)
 {
 	Matrix *matx = calloc(1, sizeof(Matrix));
@@ -50,6 +53,7 @@ int read_file(char *name_file, Matrix *matx)
 	if (in == NULL) {
 		return 1;
 	}
+
 	int new_x, new_y;
 	fscanf(in, "%c %c %d %d", &matx->empty_cell, &matx->life_cell, &new_x, &new_y);
 
@@ -61,10 +65,10 @@ int read_file(char *name_file, Matrix *matx)
 		for (int x = 0; x < matx->size_x; x++) {
 			int tmp;
 			fscanf(in, "%d", &tmp);
-			mode_cell(matx->cell + (x + matx->size_y * y), tmp);
 			if (tmp == '\n') {
 				x--;
-			}	
+			}
+			mode_cell(matx->cell + (x + matx->size_y * y), tmp);
 		}
 	}
 	fclose(in);
@@ -112,4 +116,53 @@ void print_matrix(Matrix *matx)
 		}
 		printf("\n");
 	}
+}
+
+Matrix *rules_matx(Matrix *matx)
+{
+	Matrix *tmp_matx = init_matrix(matx->size_x, matx->size_y, matx->life_cell, matx->empty_cell);
+	if (!tmp_matx) {
+		return NULL;
+	}
+
+	copy_matrix(tmp_matx, matx);
+
+	for (int y = 0; y < matx->size_y; y++) {
+		for (int x = 0; x < matx->size_x; x++) {
+			int count = 0;
+			int local = x + matx->size_y * y;
+			for (int local_y = local - 1; local_y < local + 2; local_y++) {
+				if (local_y < 0) {
+					local_y++;
+				}
+				if (local_y > matx->size_y) {
+					local_y--;
+				}
+				for (int local_x = local - 1; local_x < local + 2; local_x++) {
+					if (local_x < 0) {
+						local_x++;
+					}
+					if (local_x > matx->size_x) {
+						local_x--;
+					}
+					if (matx->cell[local_x + matx->size_y * local_y].state == 1) {
+						count++;
+					}
+				}	
+			}
+			if (matx->cell[local].state == 0 && count == 3) {
+				mode_cell(tmp_matx->cell + local, LIFE);
+			}
+			if (matx->cell[local].state == 1 && (count == 3 || count == 2)) {
+				continue;
+			}
+			if (count < 2 || count > 3) {
+				mode_cell(tmp_matx->cell + local, DEAD);
+			}
+		}
+	}
+	
+	copy_matrix(matx, tmp_matx);
+
+	return matx;
 }

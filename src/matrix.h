@@ -26,4 +26,6 @@ Matrix *resize_matx(Matrix *matx, int x, int y);
 
 void print_matrix(Matrix *matx);
 
+Matrix *rules_matx(Matrix *matx);
+
 #endif

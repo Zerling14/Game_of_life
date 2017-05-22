@@ -17,12 +17,20 @@ int main()
 		return 1;
 	}
 
-	if (read_file("test_out.txt", matx) == 1) {
+	if (read_file("test_read.txt", matx) == 1) {
 		printf("Error read file\n");
 		return 1;
 	}
 
 	print_matrix(matx);
+
+	for (int i = 0; i < matx->size_x * matx->size_y; i++) {
+		if (i % 5 == 0) {
+			printf("\n");
+		}
+		printf("%d", matx->cell[i].state);
+	}
+	printf("\n");
 
 	free_matrix(matx);
 	return 0;
