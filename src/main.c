@@ -5,19 +5,108 @@
 #include "cell.h"
 #include <string.h>
 
+#define MAX_LENGHT_STR 256
+
 void print_help()
 {
 	printf("Commands:\n");
 	printf("next\t: This command executes the game step\n");
-	printf("write\tThis command writes the matrix to a file (you must specify a file name)\n");
-	printf("read\tThis command reads the file containing the matrix and its settings (you must specify a file name)\n");
+	printf("write\t: This command writes the matrix to a file (you must specify a file name)\n");
+	printf("read\t: This command reads the file containing the matrix and its settings (you must specify a file name)\n");
 }
 
 void print_get_name_file(char *name_file)
 {
-	printf("Enter to name of file:\n");
+	printf("Enter to name of file: ");
 	scanf("%s", name_file);
-	//return name_file;
+}
+
+char *create_tmp_str(char *str)
+{
+	char *buf = malloc(sizeof(char) * strlen(str) + 1);
+	strcpy(buf, str);
+
+	return buf;
+}
+
+void start(char *answer)
+{
+	printf("command: ");
+	scanf("%s", answer);
+}
+
+void first(char *name_file)
+{
+	print_get_name_file(name_file);
+}
+
+void menu(Matrix *matx)
+{
+	char *answer = malloc(sizeof(char) * MAX_LENGHT_STR);
+	while (1) {
+		start(answer);
+		//char *buf = create_tmp_str(answer);
+		if (!strcmp(answer, "next")) {
+			system("clear");
+
+			printf("OLD MATRIX:\n");
+			print_matrix(matx);
+
+			rules_matx(matx);
+
+			printf("NOW MATRIX:\n");
+			print_matrix(matx);
+		
+			continue;
+		}
+		if (!strcmp(answer, "help")) {
+			system("clear");
+			print_help();
+			continue;
+		}
+		if (!strcmp(answer, "write")) {
+			system("clear");
+
+			char *name_file = malloc(sizeof(char) * MAX_LENGHT_STR);
+			print_get_name_file(name_file);
+
+			write_file(name_file, matx);
+
+			printf("Complete.\n");
+
+			print_matrix(matx);
+
+			free(name_file);
+
+			continue;
+		}
+		if (!strcmp(answer, "read")) {
+			system("clear");
+
+			char *name_file = malloc(sizeof(char) * MAX_LENGHT_STR);
+
+			print_get_name_file(name_file);
+			read_file(name_file, matx);
+
+			printf("Complete.\n");
+
+			print_matrix(matx);
+
+			free(name_file);
+
+			continue;
+		}
+		if (!strcmp(answer, "exit")) {
+			break;
+		}
+		print_help();
+		/*
+		if (!strcmp(answer, "\n")) {
+			
+		}
+		*/
+	}
+	free(answer);
 }
 
 int main()
@@ -33,10 +122,14 @@ int main()
 		return 1;
 	}
 
-	if (read_file("test_read.txt", matx) == 1) {
+	char *name_file = malloc(sizeof(char) * MAX_LENGHT_STR);
+	first(name_file);
+
+	if (read_file(name_file, matx) == 1) {
 		printf("Error read file\n");
 		return 1;
 	}
+	system("clear");
 	print_matrix(matx);
 	
 	/*
@@ -49,44 +142,7 @@ int main()
 	printf("\n");
 	*/
 	
-	while (1) {
-		char answer[10];
-		printf("command: ");
-		scanf("%s", answer);
-		if (!strcmp(answer, "next")) {
-			system("clear");
-			rules_matx(matx);
-			print_matrix(matx);
-			continue;
-		}
-		if (!strcmp(answer, "help")) {
-			system("clear");
-			print_help();
-			continue;
-		}
-		if (!strcmp(answer, "write")) {
-			system("clear");
-			char *name_file = malloc(sizeof(char) * 10);
-			print_get_name_file(name_file);
-			write_file(name_file, matx);
-			printf("Complete.");
-			free(name_file);
-			continue;
-		}
-		if (!strcmp(answer, "read")) {
-			system("clear");
-			char *name_file = malloc(sizeof(char) * 10);
-			print_get_name_file(name_file);
-			read_file(name_file, matx);
-			printf("Complete.");
-			free(name_file);
-			continue;
-		}
-		if (!strcmp(answer, "exit")) {
-			break;
-		}
-		
-	}
+	menu(matx);
 
 	free_matrix(matx);
 	return 0;
