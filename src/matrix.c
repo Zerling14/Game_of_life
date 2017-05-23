@@ -137,11 +137,9 @@ Matrix *rules_matx(Matrix *matx)
 			int local = x + matx->size_y * y;
 			for (int local_y = y - 1; local_y <= y + 1; local_y++) {
 				if (local_y < 0) {
-					//local_y++;
 					continue;
 				}
 				if (local_y >= matx->size_y) {
-					//ocal_y--;
 					continue;
 				}
 				for (int local_x = x - 1; local_x <= x + 1; local_x++) {
