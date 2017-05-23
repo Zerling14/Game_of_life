@@ -94,14 +94,18 @@ int write_file(char *name_file, Matrix *matx)
 
 Matrix *resize_matx(Matrix *matx, int x, int y)
 {
-	matx->size_x = x;
-	matx->size_y = y;
-
 	matx->cell = realloc(matx->cell, x * y * sizeof(Cell));
 
 	if (!matx->cell) {
 		return NULL;
 	}
+
+	for (int i = matx->size_y * matx->size_x; i < y * x; i++) {
+		matx->cell[i] = init_cell(0, matx->life_cell, matx->empty_cell);
+	}
+
+	matx->size_x = x;
+	matx->size_y = y;
 
 	return matx;
 }
@@ -112,7 +116,7 @@ void print_matrix(Matrix *matx)
 	
 	for (int y = 0; y < matx->size_y; y++) {
 		for (int x = 0; x < matx->size_x; x++) {
-			printf("%c", matx->cell[x + matx->size_y * y].char_cell);
+			printf("%c ", matx->cell[x + matx->size_y * y].char_cell);
 		}
 		printf("\n");
 	}
@@ -131,19 +135,25 @@ Matrix *rules_matx(Matrix *matx)
 		for (int x = 0; x < matx->size_x; x++) {
 			int count = 0;
 			int local = x + matx->size_y * y;
-			for (int local_y = local - 1; local_y < local + 2; local_y++) {
+			for (int local_y = y - 1; local_y <= y + 1; local_y++) {
 				if (local_y < 0) {
-					local_y++;
+					//local_y++;
+					continue;
 				}
-				if (local_y > matx->size_y) {
-					local_y--;
+				if (local_y >= matx->size_y) {
+					//ocal_y--;
+					continue;
 				}
-				for (int local_x = local - 1; local_x < local + 2; local_x++) {
+				for (int local_x = x - 1; local_x <= x + 1; local_x++) {
 					if (local_x < 0) {
-						local_x++;
+						continue;
 					}
-					if (local_x > matx->size_x) {
-						local_x--;
+					if (local_x >= matx->size_x) {
+						continue;
+					}
+
+					if (local_x == x && local_y == y) {
+						continue;
 					}
 					if (matx->cell[local_x + matx->size_y * local_y].state == 1) {
 						count++;
