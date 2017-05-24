@@ -20,6 +20,7 @@ build/src/cell.o: src/cell.c
 	gcc -Wall -c -o build/src/cell.o src/cell.c
 
 bin/test: build/tests/main.o build/tests/menu_test.o build/tests/matrix_test.o build/tests/cell_test.o build/src/cell.o build/src/matrix.o
+	mkdir bin -p
 	gcc -Wall -Werror build/src/matrix.o build/src/cell.o build/tests/main.o build/tests/menu_test.o build/tests/matrix_test.o build/tests/cell_test.o -o bin/test
 	bin/test
 
