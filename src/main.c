@@ -4,7 +4,7 @@
 #include "matrix.h"
 #include "cell.h"
 #include <string.h>
-
+#include <ctype.h>
 #define MAX_LENGHT_STR 256
 
 void print_help()
@@ -19,6 +19,37 @@ void print_get_name_file(char *name_file)
 {
 	printf("Enter to name of file: ");
 	scanf("%s", name_file);
+}
+
+int isdigit_str(char *str)
+{
+	while (*str != 0 && *str != '\n') {
+		if (!isdigit(*str)) {
+			return 0;
+		}
+		str++;
+	}
+	return 1;
+}
+
+int isfloat_str(char *str)
+{
+	int check = 0;
+	while (*str != 0 && *str != '\n') {
+		if (!isdigit(*str)) {
+			if (*str == '.') {
+				check++;
+			} else {
+				return 0;
+			}
+		}
+		str++;
+	}
+	if (check == 1) {
+	return 1;
+	} else {
+		return 0;
+	}
 }
 
 char **tokenize(char *str, int *token_num)
@@ -52,50 +83,83 @@ void menu(Matrix *matx)
 			strcpy(answer, tmp_answer);
 		}
 		strcpy(tmp_answer, answer);
-		if (!strcmp(answer, "help")) {
+		int token_num;
+		char **tokens = tokenize(answer, &token_num);
+		for (int i = 0; i < token_num; i++) {
+			if (!strcmp(tokens[i], "help")) {
+				print_help();
+				continue;
+			}
+			
+			if (!strcmp(tokens[i], "loop")) {
+				float delay_time = 0.5;
+				int iter_num = 0;
+				if (token_num - i >= 2 && isdigit_str(tokens[i + 2])) {
+					iter_num = atof(tokens[i + 2]);
+				}
+				if (token_num - i >= 3 && (isdigit_str(tokens[i + 3]) || isfloat_str(tokens[i + 3]))) {
+					delay_time = atof(tokens[i + 2]);
+				}
+				for (int i = 0; iter_num == 0 || i < iter_num; i++) {
+					rules_matx(matx);
+					print_matrix(matx);
+					char tmp_char[200];
+					sprintf(tmp_char, "sleep %f", delay_time);
+					system(tmp_char);
+				}
+				i = i + 2;
+				continue;
+			}
+
+			if (!strcmp(tokens[i], "calc")) {
+				rules_matx(matx);
+				continue;
+			}
+
+			if (!strcmp(tokens[i], "print")) {
+				print_matrix(matx);
+				continue;
+			}
+
+			if (!strcmp(tokens[i], "write")) {
+
+				char name_file[100];
+				if (token_num - i != 1) {
+					printf("Enter to name of file: ");
+					fgets(name_file, 100, stdin);
+				} else {
+					strcpy(name_file, tokens[i + 1]);
+				}
+				
+				if (name_file[strlen(name_file) - 1] == '\n') {
+						name_file[strlen(name_file) - 1] = 0;
+				}
+				write_file(name_file, matx);
+
+				printf("Complete.\n");
+
+				continue;
+			}
+			if (!strcmp(tokens[i], "read")) {
+
+				char name_file[100];
+
+				printf("Enter to name of file: ");
+				fgets(name_file, 100, stdin);
+				if (name_file[strlen(name_file) - 1] == '\n') {
+					name_file[strlen(name_file) - 1] = 0;
+				}
+				read_file(name_file, matx);
+
+				printf("Complete.\n");
+
+				continue;
+			}
+			if (!strcmp(tokens[i], "exit")) {
+				break;
+			}
 			print_help();
-			continue;
 		}
-
-		if (!strcmp(answer, "calc")) {
-			rules_matx(matx);
-			continue;
-		}
-
-		if (!strcmp(answer, "print")) {
-			//system("clear");
-			print_matrix(matx);
-			continue;
-		}
-
-		if (!strcmp(answer, "write")) {
-
-			char name_file[100];
-
-			printf("Enter to name of file: ");
-			fgets(name_file, 100, stdin);
-			write_file(name_file, matx);
-
-			printf("Complete.\n");
-
-			continue;
-		}
-		if (!strcmp(answer, "read")) {
-
-			char name_file[100];
-
-			printf("Enter to name of file: ");
-			fgets(name_file, 100, stdin);
-			read_file(name_file, matx);
-
-			printf("Complete.\n");
-
-			continue;
-		}
-		if (!strcmp(answer, "exit")) {
-			break;
-		}
-		print_help();
 	}
 }
 
