@@ -21,78 +21,74 @@ void print_get_name_file(char *name_file)
 	scanf("%s", name_file);
 }
 
-char *create_tmp_str(char *str)
+char **tokenize(char *str, int *token_num)
 {
-	char *buf = malloc(sizeof(char) * strlen(str) + 1);
-	strcpy(buf, str);
-
-	return buf;
-}
-
-void start(char *answer)
-{
-	printf("command: ");
-	scanf("%s", answer);
-}
-
-void first(char *name_file)
-{
-	print_get_name_file(name_file);
+	char **tokens = calloc(10, sizeof(char*));
+	int tok_p = 0;
+	tokens[tok_p] = strtok(str, " ");
+	tok_p++;
+	while (tokens[tok_p - 1] != NULL) {
+		//printf("%s\n", tokens[tok_p - 1]);
+		tokens[tok_p] = strtok (NULL, " ");
+		tok_p++;
+	}
+	*token_num = tok_p - 1;
+	return tokens;
 }
 
 void menu(Matrix *matx)
 {
-	char *answer = malloc(sizeof(char) * MAX_LENGHT_STR);
+	char answer[200];
+	char tmp_answer[200];
 	while (1) {
-		start(answer);
-		//char *buf = create_tmp_str(answer);
-		if (!strcmp(answer, "next")) {
-			system("clear");
-
-			printf("OLD MATRIX:\n");
-			print_matrix(matx);
-
-			rules_matx(matx);
-
-			printf("NOW MATRIX:\n");
-			print_matrix(matx);
+		printf("command: ");
+		//scanf("%s", answer);
+		fgets(answer, 200, stdin);
 		
-			continue;
+		if (answer[strlen(answer) - 1] == '\n') {
+			answer[strlen(answer) - 1] = 0;
 		}
+		if (!strcmp(answer, "next") || answer[0] == '\0') {
+			strcpy(answer, tmp_answer);
+		}
+		strcpy(tmp_answer, answer);
 		if (!strcmp(answer, "help")) {
-			system("clear");
 			print_help();
 			continue;
 		}
+
+		if (!strcmp(answer, "calc")) {
+			rules_matx(matx);
+			continue;
+		}
+
+		if (!strcmp(answer, "print")) {
+			//system("clear");
+			print_matrix(matx);
+			continue;
+		}
+
 		if (!strcmp(answer, "write")) {
-			system("clear");
 
-			char *name_file = malloc(sizeof(char) * MAX_LENGHT_STR);
-			print_get_name_file(name_file);
+			char name_file[100];
 
+			printf("Enter to name of file: ");
+			fgets(name_file, 100, stdin);
 			write_file(name_file, matx);
 
 			printf("Complete.\n");
 
-			print_matrix(matx);
-
-			free(name_file);
-
 			continue;
 		}
 		if (!strcmp(answer, "read")) {
-			system("clear");
 
-			char *name_file = malloc(sizeof(char) * MAX_LENGHT_STR);
+			char name_file[100];
 
-			print_get_name_file(name_file);
+			printf("Enter to name of file: ");
+			fgets(name_file, 100, stdin);
 			read_file(name_file, matx);
 
 			printf("Complete.\n");
-
-			print_matrix(matx);
-
-			free(name_file);
 
 			continue;
 		}
@@ -100,21 +96,15 @@ void menu(Matrix *matx)
 			break;
 		}
 		print_help();
-		/*
-		if (!strcmp(answer, "\n")) {
-			
-		}
-		*/
 	}
-	free(answer);
 }
 
 int main()
 {
 	char empty_cell = '.';
 	char life_cell = '0';
-	int size_x = 1;
-	int size_y = 1;
+	int size_x = 10;
+	int size_y = 10;
 
 	Matrix *matx = init_matrix(size_x, size_y, life_cell, empty_cell);
 	if (matx == NULL) {
@@ -122,26 +112,6 @@ int main()
 		return 1;
 	}
 
-	char *name_file = malloc(sizeof(char) * MAX_LENGHT_STR);
-	first(name_file);
-
-	if (read_file(name_file, matx) == 1) {
-		printf("Error read file\n");
-		return 1;
-	}
-	system("clear");
-	print_matrix(matx);
-	
-	/*
-	for (int i = 0; i < matx->size_x * matx->size_y; i++) {
-		if (i % matx->size_y == 0) {
-			printf("\n");
-		}
-		printf("%d ", matx->cell[i].state);
-	}
-	printf("\n");
-	*/
-	
 	menu(matx);
 
 	free_matrix(matx);
