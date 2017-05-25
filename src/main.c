@@ -5,14 +5,42 @@
 #include "cell.h"
 #include <string.h>
 #include <ctype.h>
+
 #define MAX_LENGHT_STR 256
+#define CSI "\x1B\x5B"
+
+char colors[][5] = {
+"0;30", /* Black */ "1;30", /* Dark Gray */
+"0;31", /* Red */ "1;31", /* Bold Red */
+"0;32", /* Green */ "1;32", /* Bold Green */
+"0;33", /* Yellow */ "1;33", /* Bold Yellow */
+"0;34", /* Blue */ "1;34", /* Bold Blue */
+"0;35", /* Purple */ "1;35", /* Bold Purple */
+"0;36", /* Cyan */ "1;36" /*Bold Cyan */ };
+int colors_sz = sizeof(colors) / sizeof(colors[0]);
 
 void print_help()
 {
-	printf("Commands:\n");
-	printf("next\t: This command executes the game step\n");
+	printf("%s%sm", CSI, colors[3]);
+	printf("help\t: This command displays help.\n");
+
+
+	printf("next\t: This command repeats the previous command.\n");
+
+	
 	printf("write\t: This command writes the matrix to a file (you must specify a file name)\n");
+	
+
 	printf("read\t: This command reads the file containing the matrix and its settings (you must specify a file name)\n");
+
+
+	printf("loop\t: This command starts a series of game steps and outputs them.\n");
+
+
+	printf("calc\t: This commmand makes one game step.\n");
+
+	printf("exit\t: This command completes the game.\n");
+	printf("%s0m", CSI);
 }
 
 void print_get_name_file(char *name_file)
