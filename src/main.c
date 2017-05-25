@@ -5,7 +5,6 @@
 #include "cell.h"
 #include <string.h>
 #include <ctype.h>
-#include <conio.h>
 
 #define MAX_LENGHT_STR 256
 #define CSI "\x1B\x5B"
@@ -22,26 +21,26 @@ int colors_sz = sizeof(colors) / sizeof(colors[0]);
 
 void print_help()
 {
-	printf("%s%sm", CSI, colors[3]);
-	printf("help\t: This command displays help.\n");
+	printf("%s%sm", CSI, colors[9]);
+	printf("help\t: displays help.\n");
 
-	printf("next\t: This command repeats the previous command.\n");
+	printf("next\t: repeats the previous command.\n");
 	
-	printf("write [file_name]\t: This command writes the matrix to a file (you must specify a file name)\n");
+	printf("write [file_name]\t: writes the matrix to a file (you must specify a file name)\n");
 	
-	printf("read [file_name]\t: This command reads the file containing the matrix and its settings (you must specify a file name)\n");
+	printf("read [file_name]\t: reads the file containing the matrix and its settings (you must specify a file name)\n");
 
-	printf("loop [repeat_num] [delay]\t: This command repeats \"calc\" and \"print\", \"repeat_num\" times and with a \"delay\" in sec, delay is maybe float, repeat_num can be zero then the loop will be infinite \n");
+	printf("loop [repeat_num] [delay]\t: repeats \"calc\" and \"print\", \"repeat_num\" times and with a \"delay\" in sec, delay is maybe float, repeat_num can be zero then the loop will be infinite \n");
 	
-	printf("calc\t: This commmand makes one game step.\n");
+	printf("calc\t: makes one game step.\n");
 
-	printf("print\t:\n");
+	printf("print\t: print matrix in console.\n");
 	
-	printf("step\t:\n");
+	printf("step\t: makes one game step and print matrix in console.\n");
 	
-	printf("clear\t:\n");
+	printf("clear\t: clear console.\n");
 	
-	printf("exit\t: This command completes the game.\n");
+	printf("exit\t: completes the game.\n");
 	printf("%s0m", CSI);
 }
 
@@ -120,7 +119,7 @@ void menu(Matrix *matx)
 				print_help();
 				continue;
 			}
-			
+			/*
 			if (!strcmp(tokens[i], "loop")) {
 				float delay_time = 0.5;
 				int iter_num = 0;
@@ -144,7 +143,7 @@ void menu(Matrix *matx)
 				i = i + 2;
 				continue;
 			}
-
+			*/
 			if (!strcmp(tokens[i], "calc")) {
 				rules_matx(matx);
 				continue;
