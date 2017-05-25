@@ -5,6 +5,7 @@
 #include "cell.h"
 #include <string.h>
 #include <ctype.h>
+#include <conio.h>
 
 #define MAX_LENGHT_STR 256
 #define CSI "\x1B\x5B"
@@ -24,21 +25,22 @@ void print_help()
 	printf("%s%sm", CSI, colors[3]);
 	printf("help\t: This command displays help.\n");
 
-
 	printf("next\t: This command repeats the previous command.\n");
-
 	
-	printf("write\t: This command writes the matrix to a file (you must specify a file name)\n");
+	printf("write [file_name]\t: This command writes the matrix to a file (you must specify a file name)\n");
 	
+	printf("read [file_name]\t: This command reads the file containing the matrix and its settings (you must specify a file name)\n");
 
-	printf("read\t: This command reads the file containing the matrix and its settings (you must specify a file name)\n");
-
-
-	printf("loop\t: This command starts a series of game steps and outputs them.\n");
-
-
+	printf("loop [repeat_num] [delay]\t: This command repeats \"calc\" and \"print\", \"repeat_num\" times and with a \"delay\" in sec, delay is maybe float, repeat_num can be zero then the loop will be infinite \n");
+	
 	printf("calc\t: This commmand makes one game step.\n");
 
+	printf("print\t:\n");
+	
+	printf("step\t:\n");
+	
+	printf("clear\t:\n");
+	
 	printf("exit\t: This command completes the game.\n");
 	printf("%s0m", CSI);
 }
@@ -122,18 +124,22 @@ void menu(Matrix *matx)
 			if (!strcmp(tokens[i], "loop")) {
 				float delay_time = 0.5;
 				int iter_num = 0;
-				if (token_num - i >= 2 && isdigit_str(tokens[i + 2])) {
-					iter_num = atof(tokens[i + 2]);
+				if (token_num - i >= 2 && isdigit_str(tokens[i + 1])) {
+					iter_num = atof(tokens[i + 1]);
 				}
-				if (token_num - i >= 3 && (isdigit_str(tokens[i + 3]) || isfloat_str(tokens[i + 3]))) {
+				if (token_num - i >= 3 && (isdigit_str(tokens[i + 2]) || isfloat_str(tokens[i + 2]))) {
 					delay_time = atof(tokens[i + 2]);
 				}
-				for (int i = 0; iter_num == 0 || i < iter_num; i++) {
+				for (int i = 0; (iter_num == 0 || i < iter_num); i++) {
 					rules_matx(matx);
 					print_matrix(matx);
 					char tmp_char[200];
 					sprintf(tmp_char, "sleep %f", delay_time);
 					system(tmp_char);
+					if (kbhit()) {
+						i = iter_num + 1;
+						break;
+					}
 				}
 				i = i + 2;
 				continue;
@@ -148,15 +154,27 @@ void menu(Matrix *matx)
 				print_matrix(matx);
 				continue;
 			}
+			
+			if (!strcmp(tokens[i], "step")) {
+				rules_matx(matx);
+				print_matrix(matx);
+				continue;
+			}
+			
+			if (!strcmp(tokens[i], "clear")) {
+				system("clear");
+				continue;
+			}
 
 			if (!strcmp(tokens[i], "write")) {
 
 				char name_file[100];
-				if (token_num - i != 1) {
+				if (token_num - i == 1) {
 					printf("Enter to name of file: ");
 					fgets(name_file, 100, stdin);
 				} else {
 					strcpy(name_file, tokens[i + 1]);
+					i++;
 				}
 				
 				if (name_file[strlen(name_file) - 1] == '\n') {
@@ -171,9 +189,14 @@ void menu(Matrix *matx)
 			if (!strcmp(tokens[i], "read")) {
 
 				char name_file[100];
-
-				printf("Enter to name of file: ");
-				fgets(name_file, 100, stdin);
+				if (token_num - i == 1) {
+					printf("Enter to name of file: ");
+					fgets(name_file, 100, stdin);
+				} else {
+					strcpy(name_file, tokens[i + 1]);
+					i++;
+				}
+				
 				if (name_file[strlen(name_file) - 1] == '\n') {
 					name_file[strlen(name_file) - 1] = 0;
 				}
@@ -183,8 +206,8 @@ void menu(Matrix *matx)
 
 				continue;
 			}
-			if (!strcmp(tokens[i], "exit")) {
-				break;
+			if (!strcmp(tokens[i], "exit") || !strcmp(tokens[i], "quit")) {
+				return;
 			}
 			print_help();
 		}
