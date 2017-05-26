@@ -159,7 +159,7 @@ void menu(Matrix *matx)
 							break;
 						}
 					#elif __linux__
-						usleep(delay_time * 1000);
+						usleep(delay_time * 1000000);
 					#endif
 				}
 				i = i + 2;
