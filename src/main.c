@@ -8,7 +8,9 @@
 
 #ifdef WIN32
 	#include <conio.h>
+	#include <windows.h>
 #elif __linux__
+	#include <unistd.h>
 	#define CSI "\x1B\x5B"	
 	
 	char colors[][5] = {
@@ -149,16 +151,16 @@ void menu(Matrix *matx)
 				for (int i = 0; (iter_num == 0 || i < iter_num); i++) {
 					rules_matx(matx);
 					print_matrix(matx);
-					char tmp_char[200];
-					sprintf(tmp_char, "sleep %f", delay_time);
-					system(tmp_char);
 					#ifdef WIN32
+						Sleep(delay_time * 1000);
 						if (kbhit()) {
 							i = iter_num + 1;
+							iter_num = -1;
 							break;
 						}
+					#elif __linux__
+						usleep(delay_time * 1000);
 					#endif
-					
 				}
 				i = i + 2;
 				continue;
