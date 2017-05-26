@@ -3,53 +3,49 @@
 #include <cell.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 CTEST(matrix, init_matrix_1)
 {
-	Matrix *matx = malloc(sizeof(Matrix));
+	Matrix *matx = init_matrix(10, 10, '0', '.');
 
 	ASSERT_NOT_NULL(matx);
 }
 
 CTEST(matrix, init_matrix_2)
 {
-	Matrix *matx = malloc(sizeof(Matrix));
+	Matrix *matx = init_matrix(10, 10, '0', '.');
 
 	int x = 10;
-	matx->size_x = x;
 	
 	ASSERT_EQUAL(matx->size_x, x);
 }
 
-
 CTEST(matrix, init_matrix_3)
 {
-	Matrix *matx = malloc(sizeof(Matrix));
+	Matrix *matx = init_matrix(10, 10, '0', '.');
 
 	int y = 10;
-	matx->size_y = y;
 
 	ASSERT_EQUAL(matx->size_y, y);
 }
 
 CTEST(matrix, init_matrix_4)
 {
-	Matrix *matx = malloc(sizeof(Matrix));
+	Matrix *matx = init_matrix(10, 10, '0', '.');
 
 	char life = '0';
-	matx->empty_cell = life;
 
-	ASSERT_STR(&matx->empty_cell, &life);
+	ASSERT_EQUAL(matx->life_cell, life);
 }
 
 CTEST(matrix, init_matrix_5)
 {
-	Matrix *matx = malloc(sizeof(Matrix));
+	Matrix *matx = init_matrix(10, 10, '0', '.');
 
 	char empty = '.';
-	matx->life_cell = empty;
 
-	ASSERT_STR(&matx->life_cell, &empty);
+	ASSERT_EQUAL(matx->empty_cell, empty);
 }
 
 CTEST(matrix, init_matrix_6)
@@ -59,51 +55,23 @@ CTEST(matrix, init_matrix_6)
 	int x = 1, y = 1;
 	matx->cell = calloc(x * y, sizeof(Cell));
 	
-	ASSERT_NULL(matx->cell);
+	ASSERT_NOT_NULL(matx->cell);
 }
 
 CTEST(matrix, init_matrix_7)
 {
-	Matrix *matx = malloc(sizeof(Matrix));
+	Matrix *matx = init_matrix(10, 10, '0', '.');
 
-	int x = 1, y = 1;
-	char life = '0', empty = '.';
-
-	matx->cell = calloc(x * y, sizeof(Cell));
-	for (int i = 0; i < x * y; i++) {
-		matx->cell[i] = init_cell(0, life, empty); 
+	int count = 0;
+	for (int i = 0; i < matx->size_y * matx->size_x; i++) {
+		if (matx->cell[i].state == 1) {
+			count++;
+		}
 	}
-	ASSERT_EQUAL(matx->cell[0].state, 0);
+
+	ASSERT_EQUAL(count, 0);
 }
 
-CTEST(matrix, init_matrix_8)
-{
-	Matrix *matx = malloc(sizeof(Matrix));
-
-	int x = 1, y = 1;
-	char life = '0', empty = '.';
-
-	matx->cell = calloc(x * y, sizeof(Cell));
-	for (int i = 0; i < x * y; i++) {
-		matx->cell[i] = init_cell(0, life, empty); 
-	}
-	ASSERT_STR(&matx->cell[0].life_char_cell, &life);
-}
-
-CTEST(matrix, init_matrix_9)
-{
-	Matrix *matx = malloc(sizeof(Matrix));
-
-	int x = 1, y = 1;
-	char life = '0', empty = '.';
-
-	matx->cell = calloc(x * y, sizeof(Cell));
-	for (int i = 0; i < x * y; i++) {
-		matx->cell[i] = init_cell(0, life, empty); 
-	}
-	ASSERT_STR(&matx->cell[0].empty_char_cell, &empty);
-}
-/*
 CTEST(matrix, copy_matrix)
 {
 	char empty_cell = '.';
@@ -113,20 +81,23 @@ CTEST(matrix, copy_matrix)
 
 	Matrix *matx_orig = init_matrix(size_x, size_y, life_cell, empty_cell);
 
+	for (int i = 0; i < 5; i++) {
+		matx_orig->cell[i].state = 1;
+	}
+
 	Matrix *matx_cpy = init_matrix(size_x, size_y, life_cell, empty_cell);
+
 	copy_matrix(matx_cpy, matx_orig);
 
-	char arr_orig[size_x * size_y];
-	for (int i = 0; i < size_x * size_y; i++) {
-		arr_orig[i] = (char)matx_orig->cell[i].state;
+	int count = 0;
+	for (int i = 0; i < 5; i++) {
+		if (matx_cpy->cell[i].state == 0) {
+			count++;
+		}
 	}
-	char arr_cpy[size_x * size_y];
-	for (int i = 0; i < size_x * size_y; i++) {
-		arr_cpy[i] = (char)matx_cpy->cell[i].state;
-	}
-	ASSERT_DATA(arr_cpy, size_x * size_y, arr_orig, size_x * size_y);
+	ASSERT_EQUAL(count, 0);
 }
-*/
+
 CTEST(matrix, read_file_1)
 {
 	char empty_cell = '.';
@@ -137,15 +108,15 @@ CTEST(matrix, read_file_1)
 	Matrix *matx = init_matrix(size_x, size_y, life_cell, empty_cell);
 
 	FILE *write_test = fopen("test.txt", "w");
-	fprintf(write_test, "%c %c %d %d", '.', '0', 5, 1);
-	fprintf(write_test, "%d %d %d %d %d", 1, 1, 1, 1, 1);
+	fprintf(write_test, "%c %c %d %d\n", '.', '0', 5, 1);
+	fprintf(write_test, "%d %d %d %d %d\n", 1, 1, 1, 1, 1);
 	fclose(write_test);
 
 	read_file("test.txt", matx);
 
 	system("rm test.txt");
 
-	ASSERT_STR(&matx->empty_cell, ".");
+	ASSERT_EQUAL(matx->empty_cell, '.');
 }
 
 CTEST(matrix, read_file_2)
@@ -158,8 +129,8 @@ CTEST(matrix, read_file_2)
 	Matrix *matx = init_matrix(size_x, size_y, life_cell, empty_cell);
 
 	FILE *write_test = fopen("test.txt", "w");
-	fprintf(write_test, "%c %c %d %d", '.', '0', 5, 1);
-	fprintf(write_test, "%d %d %d %d %d", 1, 1, 1, 1, 1);
+	fprintf(write_test, "%c %c %d %d\n", '.', '0', 5, 1);
+	fprintf(write_test, "%d %d %d %d %d\n", 1, 1, 1, 1, 1);
 	fclose(write_test);
 
 	read_file("test.txt", matx);
@@ -179,8 +150,8 @@ CTEST(matrix, read_file_3)
 	Matrix *matx = init_matrix(size_x, size_y, life_cell, empty_cell);
 
 	FILE *write_test = fopen("test.txt", "w");
-	fprintf(write_test, "%c %c %d %d", '.', '0', 5, 1);
-	fprintf(write_test, "%d %d %d %d %d", 1, 1, 1, 1, 1);
+	fprintf(write_test, "%c %c %d %d\n", '.', '0', 5, 1);
+	fprintf(write_test, "%d %d %d %d %d\n", 1, 1, 1, 1, 1);
 	fclose(write_test);
 
 	read_file("test.txt", matx);
@@ -200,17 +171,17 @@ CTEST(matrix, read_file_4)
 	Matrix *matx = init_matrix(size_x, size_y, life_cell, empty_cell);
 
 	FILE *write_test = fopen("test.txt", "w");
-	fprintf(write_test, "%c %c %d %d", '.', '0', 5, 1);
-	fprintf(write_test, "%d %d %d %d %d", 1, 1, 1, 1, 1);
+	fprintf(write_test, "%c %c %d %d\n", '.', '0', 5, 1);
+	fprintf(write_test, "%d %d %d %d %d\n", 1, 1, 1, 1, 1);
 	fclose(write_test);
 
 	read_file("test.txt", matx);
 
 	system("rm test.txt");
 
-	ASSERT_EQUAL(matx->size_x, 1);
+	ASSERT_EQUAL(matx->size_x, 5);
 }
-/*
+
 CTEST(matrix, read_file_5)
 {
 	char empty_cell = '.';
@@ -221,19 +192,24 @@ CTEST(matrix, read_file_5)
 	Matrix *matx = init_matrix(size_x, size_y, life_cell, empty_cell);
 
 	FILE *write_test = fopen("test.txt", "w");
-	fprintf(write_test, "%c %c %d %d", '.', '0', 5, 1);
-	fprintf(write_test, "%d %d %d %d %d", 1, 1, 1, 1, 1);
+	fprintf(write_test, "%c %c %d %d\n", '.', '0', 5, 1);
+	fprintf(write_test, "%d %d %d %d %d\n", 1, 1, 1, 1, 1);
 	fclose(write_test);
 
 	read_file("test.txt", matx);
 
-	int array[] = {1, 1, 1, 1, 1};
-
 	system("rm test.txt");
 
-	ASSERT_DATA(matx_cpy->cell, 5, array, 5);
+	int count = 0;
+	for (int i = 0; i < 5; i++) {
+		if (matx->cell[i].state == 0) {
+			count++;
+		}
+	}
+
+	ASSERT_EQUAL(count, 0);
 }
-*/
+
 CTEST(matrix, write_file_1)
 {
 	char empty_cell = '.';
@@ -249,10 +225,11 @@ CTEST(matrix, write_file_1)
 
 	char empty;
 	fscanf(test, "%c", &empty);
+
 	fclose(test);
 	system("rm test.txt");
 
-	ASSERT_STR(&empty, ".");
+	ASSERT_EQUAL(empty, '.');
 }
 
 CTEST(matrix, write_file_2)
@@ -274,7 +251,7 @@ CTEST(matrix, write_file_2)
 
 	system("rm test.txt");
 	fclose(test);
-	ASSERT_STR(&life, "0");
+	ASSERT_EQUAL(life, '0');
 }
 
 CTEST(matrix, write_file_3)
@@ -290,9 +267,9 @@ CTEST(matrix, write_file_3)
 
 	FILE *test = fopen("test.txt", "r");
 
-	char test_x;
+	int test_x;
 	fseek(test, 4, SEEK_SET);
-	fscanf(test, "%c", &test_x);
+	fscanf(test, "%d", &test_x);
 	fclose(test);
 	system("rm test.txt");
 
@@ -312,15 +289,15 @@ CTEST(matrix, write_file_4)
 
 	FILE *test = fopen("test.txt", "r");
 
-	char test_y;
+	int test_y;
 	fseek(test, 6, SEEK_SET);
-	fscanf(test, "%c", &test_y);
+	fscanf(test, "%d", &test_y);
 	fclose(test);
 	system("rm test.txt");
 
 	ASSERT_EQUAL(test_y, size_y);
 }
-/*
+
 CTEST(matrix, write_file_5)
 {
 	char empty_cell = '.';
@@ -334,20 +311,24 @@ CTEST(matrix, write_file_5)
 
 	FILE *test = fopen("test.txt", "r");
 
-	char test_x;
 	fseek(test, 7, SEEK_SET);
 
 	int test_array[5];
 
-	fscanf(test, "%d %d %d %d %d", test_array[0], test_array[1], test_array[2], test_array[3], test_array[4]);
-	fclose(test):
+	fscanf(test, "%d %d %d %d %d", &test_array[0], &test_array[1], &test_array[2], &test_array[3], &test_array[4]);
+	fclose(test);
 	system("rm test.txt");
 
-	int array[] = {0, 0, 0, 0, 0};
+	int count = 0;
+	for (int i = 0; i < 5; i++) {
+		if (test_array[i] == 1) {
+			count++;
+		}
+	}
 
-	ASSERT_DATA(matx_cpy->cell, 5, array, 5);
+	ASSERT_EQUAL(count, 0);
 }
-*/
+
 CTEST(matrix, resize_matx_1)
 {
 	char empty_cell = '.';
@@ -381,7 +362,7 @@ CTEST(matrix, resize_matx_2)
 
 	ASSERT_EQUAL(matx->size_y, new_size_y);
 }
-/*
+
 CTEST(matrix, resize_matx_3)
 {
 	char empty_cell = '.';
@@ -396,8 +377,12 @@ CTEST(matrix, resize_matx_3)
 
 	resize_matx(matx, new_size_x, new_size_y);
 
-	int array[] = {0, 0, 0, 0, 0, 0};
+	int count = 0;
+	for (int i = new_size_x + 1; i < new_size_x * new_size_y; i++) {
+		if (matx->cell[i].state == 1) {
+			count++;
+		}
+	}
 
-	ASSERT_DATA(matx_cpy.cell + 0 + new_size_y + 1, 6, array, 6);
+	ASSERT_EQUAL(count, 0);
 }
-*/
