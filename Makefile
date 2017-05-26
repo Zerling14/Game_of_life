@@ -12,7 +12,7 @@ build/src/main.o: src/main.c
 build/src/matrix.o: src/matrix.c
 	mkdir build -p
 	mkdir build/src -p
-	gcc -Wall -c -o build/src/matrix.o src/matrix.c
+	gcc -std=c99 -Wall -c -o build/src/matrix.o src/matrix.c
 	
 build/src/cell.o: src/cell.c
 	mkdir build -p
