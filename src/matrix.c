@@ -42,7 +42,7 @@ void copy_matrix(Matrix *matx_des, Matrix *matx_src)
 {
 	for (int y = 0; y < matx_src->size_y; y++) {
 		for (int x = 0; x < matx_src->size_x; x++) {
-			matx_des->cell[x + matx_src->size_y * y] = matx_src->cell[x + matx_src->size_y * y];
+			matx_des->cell[x + matx_src->size_y * y] = *get_cell_from_matrix(matx_src, x, y);
 		}
 	}
 }
@@ -84,7 +84,7 @@ int write_file(char *name_file, Matrix *matx)
 	fprintf(out, "%c %c %d %d\n", matx->empty_cell, matx->life_cell, matx->size_x, matx->size_y);
 	for (int y = 0; y < matx->size_y; y++) {
 		for (int x = 0; x < matx->size_x; x++) {
-			fprintf(out, "%d ", check_cell(matx->cell[x + matx->size_y * y]));
+			fprintf(out, "%d ", check_cell(*get_cell_from_matrix(matx, x, y)));
 		}
 		fprintf(out, "\n");
 	}
@@ -116,7 +116,7 @@ void print_matrix(Matrix *matx)
 	
 	for (int y = 0; y < matx->size_y; y++) {
 		for (int x = 0; x < matx->size_x; x++) {
-			printf("%c ", char_cell(matx->cell[x + matx->size_y * y]));
+			printf("%c ", char_cell(*get_cell_from_matrix(matx, x, y)));
 		}
 		printf("\n");
 	}
@@ -153,7 +153,7 @@ Matrix *rules_matx(Matrix *matx)
 					if (local_x == x && local_y == y) {
 						continue;
 					}
-					if (check_cell(matx->cell[local_x + matx->size_y * local_y]) == 1) {
+					if (check_cell(*get_cell_from_matrix(matx, local_x, local_y)) == 1) {
 						count++;
 					}
 				}	
