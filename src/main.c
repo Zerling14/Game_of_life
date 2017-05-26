@@ -128,7 +128,6 @@ void menu(Matrix *matx)
 				print_help();
 				continue;
 			}
-			
 			if (!strcmp(tokens[i], "loop")) {
 				float delay_time = 0.5;
 				#ifdef WIN32
@@ -136,8 +135,6 @@ void menu(Matrix *matx)
 				#elif __linux__ 
 					int iter_num = 5;
 				#endif
-				
-
 				if (token_num - i >= 2 && isdigit_str(tokens[i + 1])) {
 					iter_num = atof(tokens[i + 1]);
 				}
