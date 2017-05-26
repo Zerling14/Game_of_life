@@ -6,22 +6,31 @@
 #include <string.h>
 #include <ctype.h>
 
-#define MAX_LENGHT_STR 256
-#define CSI "\x1B\x5B"
+#ifdef WIN32
+	#include <conio.h>
+#elif __linux__
+	#define CSI "\x1B\x5B"	
+	
+	char colors[][5] = {
+	"0;30", /* Black */ "1;30", /* Dark Gray */
+	"0;31", /* Red */ "1;31", /* Bold Red */
+	"0;32", /* Green */ "1;32", /* Bold Green */
+	"0;33", /* Yellow */ "1;33", /* Bold Yellow */
+	"0;34", /* Blue */ "1;34", /* Bold Blue */
+	"0;35", /* Purple */ "1;35", /* Bold Purple */
+	"0;36", /* Cyan */ "1;36" /*Bold Cyan */ };
+	int colors_sz = sizeof(colors) / sizeof(colors[0]);
+#endif
 
-char colors[][5] = {
-"0;30", /* Black */ "1;30", /* Dark Gray */
-"0;31", /* Red */ "1;31", /* Bold Red */
-"0;32", /* Green */ "1;32", /* Bold Green */
-"0;33", /* Yellow */ "1;33", /* Bold Yellow */
-"0;34", /* Blue */ "1;34", /* Bold Blue */
-"0;35", /* Purple */ "1;35", /* Bold Purple */
-"0;36", /* Cyan */ "1;36" /*Bold Cyan */ };
-int colors_sz = sizeof(colors) / sizeof(colors[0]);
+
+
+
 
 void print_help()
 {
-	printf("%s%sm", CSI, colors[9]);
+	#ifdef __linux__
+		printf("%s%sm", CSI, colors[9]);
+	#endif
 	printf("help\t: displays help.\n");
 
 	printf("next\t: repeats the previous command.\n");
@@ -41,7 +50,9 @@ void print_help()
 	printf("clear\t: clear console.\n");
 	
 	printf("exit\t: completes the game.\n");
-	printf("%s0m", CSI);
+	#ifdef __linux__
+		printf("%s0m", CSI);
+	#endif
 }
 
 void print_get_name_file(char *name_file)
@@ -119,10 +130,16 @@ void menu(Matrix *matx)
 				print_help();
 				continue;
 			}
-			/*
+			
 			if (!strcmp(tokens[i], "loop")) {
 				float delay_time = 0.5;
-				int iter_num = 0;
+				#ifdef WIN32
+					int iter_num = 0;
+				#elif __linux__ 
+					int iter_num = 5;
+				#endif
+				
+
 				if (token_num - i >= 2 && isdigit_str(tokens[i + 1])) {
 					iter_num = atof(tokens[i + 1]);
 				}
@@ -135,15 +152,18 @@ void menu(Matrix *matx)
 					char tmp_char[200];
 					sprintf(tmp_char, "sleep %f", delay_time);
 					system(tmp_char);
-					if (kbhit()) {
-						i = iter_num + 1;
-						break;
-					}
+					#ifdef WIN32
+						if (kbhit()) {
+							i = iter_num + 1;
+							break;
+						}
+					#endif
+					
 				}
 				i = i + 2;
 				continue;
 			}
-			*/
+			
 			if (!strcmp(tokens[i], "calc")) {
 				rules_matx(matx);
 				continue;
