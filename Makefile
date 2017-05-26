@@ -2,22 +2,22 @@ all: bin/main
 
 bin/main: build/src/main.o build/src/matrix.o build/src/cell.o
 	mkdir bin -p
-	gcc -std=c99 -Wall -o bin/main build/src/main.o build/src/matrix.o build/src/cell.o
+	gcc -Wall -o bin/main build/src/main.o build/src/matrix.o build/src/cell.o
 
 build/src/main.o: src/main.c
 	mkdir build -p
 	mkdir build/src -p
-	gcc -std=c99 -Wall -c -o build/src/main.o src/main.c
+	gcc -Wall -c -o build/src/main.o src/main.c
 
 build/src/matrix.o: src/matrix.c
 	mkdir build -p
 	mkdir build/src -p
-	gcc -std=c99 -Wall -c -o build/src/matrix.o src/matrix.c
+	gcc -Wall -c -o build/src/matrix.o src/matrix.c
 	
 build/src/cell.o: src/cell.c
 	mkdir build -p
 	mkdir build/src -p
-	gcc -std=c99 -Wall -c -o build/src/cell.o src/cell.c
+	gcc -Wall -c -o build/src/cell.o src/cell.c
 
 bin/test: build/tests/main.o build/tests/matrix_test.o build/tests/cell_test.o build/src/cell.o build/src/matrix.o
 	mkdir bin -p

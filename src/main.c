@@ -24,10 +24,6 @@
 	int colors_sz = sizeof(colors) / sizeof(colors[0]);
 #endif
 
-
-
-
-
 void print_help()
 {
 	#ifdef __linux__

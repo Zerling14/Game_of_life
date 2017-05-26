@@ -386,3 +386,30 @@ CTEST(matrix, resize_matx_3)
 
 	ASSERT_EQUAL(count, 0);
 }
+
+CTEST(matrix, rules_matx)
+{
+	char empty_cell = '.';
+	char life_cell = '0';
+	int size_x = 3;
+	int size_y = 3;
+
+	Matrix *matx = init_matrix(size_x, size_y, life_cell, empty_cell);
+
+	matx->cell[1].state = 1;
+	matx->cell[3].state = 1;
+	matx->cell[5].state = 1;
+
+	rules_matx(matx);
+
+	int res[] = {0, 1, 0, 0, 1, 0, 0, 0, 0};
+
+	int count = 0;
+	for (int i = 0; i < size_y * size_x; i++) {
+		if (matx->cell[i].state != res[i]) {
+			count++;
+		}
+	}
+
+	ASSERT_EQUAL(count, 0);
+}
