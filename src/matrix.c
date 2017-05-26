@@ -68,7 +68,7 @@ int read_file(char *name_file, Matrix *matx)
 			if (tmp == '\n') {
 				x--;
 			}
-			mode_cell(matx->cell + (x + matx->size_y * y), tmp);
+			matx->cell[x + matx->size_y * y] = init_cell(tmp, matx->life_cell, matx->empty_cell);
 		}
 	}
 	fclose(in);
