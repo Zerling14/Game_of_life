@@ -1,3 +1,3 @@
 language: c
-compiler: gcc
+compiler: c99
 script: make test
