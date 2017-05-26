@@ -23,12 +23,12 @@ void mode_cell(Cell *cell, int mode)
 	}
 }
 
-int check_cell(Cell *cell)
+int check_cell(Cell cell)
 {
-	return cell->state;
+	return cell.state;
 }
 
-char char_cell(Cell *cell)
+char char_cell(Cell cell)
 {
-	return cell->char_cell;
+	return cell.char_cell;
 }
